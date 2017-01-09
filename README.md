@@ -1,24 +1,10 @@
-# README
+# Yelp Clone
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This week's project is a clone of Yelp. The goal is to introduce you to Rails, focusing especially on:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Creating Rails applications
+- The structure of Rails apps (MVC, the router, helpers)
+- TDD in Rails, with RSpec & Capybara
+- Associations
+- Validations
+- AJAX in Rails
