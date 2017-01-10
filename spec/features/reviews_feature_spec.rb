@@ -10,8 +10,8 @@ feature 'reviewing' do
     select '2', from: 'Rating'
     click_button 'Leave Review'
 
-    expect(current_path).to_eq '/restaurants'
+    expect(current_path).to eq '/restaurants'
     expect(page).to have_content 'too short'
   end
-  
+
 end
