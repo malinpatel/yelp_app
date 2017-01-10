@@ -3,6 +3,8 @@ require 'rails_helper'
 feature 'restaurants' do
   context 'no restaurants have been added' do
     scenario 'should display a prompt to add a restaurant' do
+      sign_up
+
       visit '/restaurants'
       expect(page).to have_content 'No restaurants yet'
       expect(page).to have_link 'Add a restaurant'
@@ -22,27 +24,72 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
-    scenario 'prompts user to fill out a form, the displays the new restaurant' do
+
+    scenario 'user has to be logged in to add restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
-      fill_in 'Name', with: 'Subway'
-      click_button 'Create Restaurant'
-      expect(page).to have_content 'Subway'
-      expect(current_path).to eq '/restaurants'
+      expect(page).to have_content 'Log in'
     end
+    context 'creating restaurants' do
+      before do
+        sign_up
+      end
 
-    context 'an invalid restaurant' do
-      scenario 'does not let you submit a name that is too short' do
+      scenario 'prompts user to fill out a form, the displays the new restaurant' do
         visit '/restaurants'
         click_link 'Add a restaurant'
-        fill_in 'Name', with: 'kf'
+        fill_in 'Name', with: 'Subway'
         click_button 'Create Restaurant'
-        expect(page).not_to have_css 'h2', text: 'kf'
-        expect(page).to have_content 'error'
+        expect(page).to have_content 'Subway'
+        expect(current_path).to eq '/restaurants'
+      end
+
+      context 'an invalid restaurant' do
+        scenario 'does not let you submit a name that is too short' do
+          visit '/restaurants'
+          click_link 'Add a restaurant'
+          fill_in 'Name', with: 'kf'
+          click_button 'Create Restaurant'
+          expect(page).not_to have_css 'h2', text: 'kf'
+          expect(page).to have_content 'error'
+        end
       end
     end
+    context 'editing restaurants' do
+      context 'logged in' do
 
+        before do
+          Restaurant.create name: 'Subway', description: 'foot long is best'
+          sign_up
+        end
+
+        scenario 'let a user edit a restaurant' do
+          visit '/restaurants'
+          click_link 'Edit Subway'
+          fill_in 'restaurant_name', with: 'KFC'
+          fill_in "restaurant_description", with: 'quite a change really'
+          click_button 'Update Restaurant'
+          expect(page).to have_content 'KFC'
+          expect(page).to have_content 'quite a change really'
+          expect(current_path).to eq '/restaurants'
+        end
+      end
+
+      context 'deleting restaurants' do
+        before { Restaurant.create name: 'Nandos', description: "Finger lickin' chicken" }
+
+        scenario 'removes a restaurant when a user clicks a delete link' do
+          sign_up
+          visit '/restaurants'
+          click_link 'Delete Nandos'
+          expect(page).not_to have_content 'Nandos'
+          expect(page).to have_content 'Restaurant deleted successfully'
+        end
+      end
+    end
   end
+
+
 
   context 'viewing restaurants' do
     let!(:subway){ Restaurant.create(name: 'Subway') }
@@ -54,31 +101,4 @@ feature 'restaurants' do
       expect(current_path).to eq "/restaurants/#{subway.id}"
     end
   end
-
-  context 'editing restaurants' do
-    before { Restaurant.create name: 'Subway', description: 'foot long is best' }
-
-    scenario 'let a user edit a restaurant' do
-      visit '/restaurants'
-      click_link 'Edit Subway'
-      fill_in 'Name', with: 'KFC'
-      fill_in "Description", with: 'quite a change really'
-      click_button 'Update Restaurant'
-      expect(page).to have_content 'KFC'
-      expect(page).to have_content 'quite a change really'
-      expect(current_path).to eq '/restaurants'
-    end
-  end
-
-  context 'deleting restaurants' do
-    before { Restaurant.create name: 'Nandos', description: "Finger lickin' chicken" }
-
-    scenario 'removes a restaurant when a user clicks a delete link' do
-      visit '/restaurants'
-      click_link 'Delete Nandos'
-      expect(page).not_to have_content 'Nandos'
-      expect(page).to have_content 'Restaurant deleted successfully'
-    end
-  end
-
 end
