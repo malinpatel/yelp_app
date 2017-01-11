@@ -15,7 +15,7 @@ class ReviewsController < ApplicationController
       redirect_to '/restaurants'
     else
       if @review.errors[:user]
-        flash[:notice] = 'You have already reviewed thie restaurant'
+        flash[:notice] = 'You have already reviewed this restaurant'
         redirect_to '/restaurants'
       else
         render :new
@@ -30,6 +30,8 @@ class ReviewsController < ApplicationController
   def review_params
     params.require(:review).permit(:thoughts, :rating)
   end
+
+
 
 
 

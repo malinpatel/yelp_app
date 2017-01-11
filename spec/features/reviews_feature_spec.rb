@@ -17,9 +17,18 @@ feature 'reviewing' do
     expect(page).to have_content 'too short'
   end
 
-  # scenario 'only allows user to add one review' do
-  #   sign
-  #
-  # end
+  scenario 'allows users to only leave one review' do
+    sign_up
+    visit '/restaurants'
+    click_link 'Review Subway'
+    fill_in "Thoughts", with: "too short"
+    select '2', from: 'Rating'
+    click_button 'Leave Review'
+    click_link 'Review Subway'
+    fill_in "Thoughts", with: "too short"
+    select '3', from: 'Rating'
+    click_button 'Leave Review'
+    expect(page).to have_content 'You have already reviewed this restaurant'
+  end
 
 end
