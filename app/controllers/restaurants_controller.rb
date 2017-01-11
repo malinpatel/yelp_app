@@ -2,6 +2,15 @@ class RestaurantsController < ApplicationController
 
   before_action :authenticate_user!, :except =>[:index, :show]
 
+  before_action :require_permission, :only => [:edit, :destroy]
+
+  def require_permission
+    if current_user != Restaurant.find(params[:id]).user
+      flash[:notice] = 'You must have created this restaurant to do this'
+      redirect_to root_path
+    end
+  end
+
   def index
     @restaurants = Restaurant.all
   end
