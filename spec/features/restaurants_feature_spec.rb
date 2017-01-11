@@ -13,7 +13,8 @@ feature 'restaurants' do
 
   context 'restaurant have been added' do
     before do
-      Restaurant.create(name: 'Subway')
+      sign_up
+      create_restaurant
     end
 
     scenario 'display restaurants' do
@@ -63,15 +64,15 @@ feature 'restaurants' do
       context 'logged in' do
 
         before do
-          Restaurant.create name: 'Subway', description: 'foot long is best'
           sign_up
+          create_restaurant
         end
 
         scenario 'let a user edit a restaurant' do
           visit '/restaurants'
           click_link 'Edit Subway'
-          fill_in 'restaurant_name', with: 'KFC'
-          fill_in "restaurant_description", with: 'quite a change really'
+          fill_in 'Name', with: 'KFC'
+          fill_in "Description", with: 'quite a change really'
           click_button 'Update Restaurant'
           expect(page).to have_content 'KFC'
           expect(page).to have_content 'quite a change really'
@@ -80,13 +81,15 @@ feature 'restaurants' do
       end
 
       context 'deleting restaurants' do
-        before { Restaurant.create name: 'Nandos', description: "Finger lickin' chicken" }
+        before do
+          sign_up
+          create_restaurant
+        end
 
         scenario 'removes a restaurant when a user clicks a delete link' do
-          sign_up
           visit '/restaurants'
-          click_link 'Delete Nandos'
-          expect(page).not_to have_content 'Nandos'
+          click_link 'Delete Subway'
+          expect(page).not_to have_content 'Subway'
           expect(page).to have_content 'Restaurant deleted successfully'
         end
       end
@@ -96,12 +99,17 @@ feature 'restaurants' do
 
 
   context 'viewing restaurants' do
-    let!(:subway){ Restaurant.create(name: 'Subway') }
+    before do
+      sign_up
+      create_restaurant
+      click_link "Sign out"
+    end
 
     scenario 'lets a user view a restaurant' do
       visit '/restaurants'
       click_link 'Subway'
       expect(page).to have_content 'Subway'
+      subway = Restaurant.first
       expect(current_path).to eq "/restaurants/#{subway.id}"
     end
   end

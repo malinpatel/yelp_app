@@ -13,3 +13,10 @@ def sign_in
   fill_in :Password, with: 'george'
   click_button 'Log in'
 end
+
+def create_restaurant
+  visit '/restaurants'
+  click_link 'Add a restaurant'
+  fill_in 'Name', with: 'Subway'
+  click_button 'Create Restaurant'
+end
