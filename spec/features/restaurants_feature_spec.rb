@@ -96,8 +96,6 @@ feature 'restaurants' do
     end
   end
 
-
-
   context 'viewing restaurants' do
     before do
       sign_up
@@ -113,4 +111,28 @@ feature 'restaurants' do
       expect(current_path).to eq "/restaurants/#{subway.id}"
     end
   end
+  context 'not signed in' do
+    before do
+      user = User.create(email: "test@test.com", password: "testtest")
+      user.restaurants.create(name: "Subway")
+    end
+
+    scenario 'users can only edit restaurants they created' do
+      sign_up
+      click_link 'Edit Subway'
+      expect(current_path).to eq '/'
+      expect(page).to have_content('You must have created this restaurant to do this')
+    end
+
+    scenario 'users can only delete restaurants they created' do
+      sign_up
+      click_link 'Delete Subway'
+      expect(current_path).to eq '/'
+      expect(page).to have_content('You must have created this restaurant to do this')
+    end
+
+
+  end
+
+
 end
