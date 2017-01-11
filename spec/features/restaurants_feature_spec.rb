@@ -25,12 +25,15 @@ feature 'restaurants' do
 
   context 'creating restaurants' do
 
+
     scenario 'user has to be logged in to add restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
       expect(page).to have_content 'Log in'
     end
-    context 'creating restaurants' do
+
+    context 'user is logged in' do
+
       before do
         sign_up
       end
@@ -55,6 +58,7 @@ feature 'restaurants' do
         end
       end
     end
+
     context 'editing restaurants' do
       context 'logged in' do
 
