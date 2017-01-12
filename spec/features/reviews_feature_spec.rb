@@ -34,4 +34,13 @@ feature 'reviewing' do
     click_link 'Delete Subway review'
     expect(page).to_not have_content('Amazing')
   end
+
+  scenario 'users can only delete restaurants that they have created' do
+    sign_up
+    create_restaurant
+    leave_review
+    click_link 'Sign out'
+    sign_up(email: "amanda@amanda.com", password: "123456")
+    expect(page).to_not have_content('Delete Subway review')
+  end
 end
