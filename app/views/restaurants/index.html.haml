@@ -3,6 +3,7 @@
     %h2= link_to restaurant.name, restaurant_path(restaurant)
     %p= restaurant.description
     - if restaurant.reviews.any?
+      %h3 Average rating: #{restaurant.average_rating.to_i}
       - restaurant.reviews.each do |review|
         %p #{review.thoughts}
         %p #{review.rating}
