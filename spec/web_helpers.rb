@@ -21,9 +21,9 @@ def create_restaurant
   click_button 'Create Restaurant'
 end
 
-def leave_review
+def leave_review(thoughts: "Amazing", rating: '5')
   click_link 'Review Subway'
-  fill_in 'Thoughts', with: 'Amazing'
-  select '3', from: 'Rating'
+  fill_in 'Thoughts', with: thoughts
+  select rating, from: 'Rating'
   click_button 'Leave Review'
 end

@@ -43,4 +43,15 @@ feature 'reviewing' do
     sign_up(email: "amanda@amanda.com", password: "123456")
     expect(page).to_not have_content('Delete Subway review')
   end
+
+  scenario 'display an average rating for all reviews' do
+    sign_up
+    create_restaurant
+    leave_review(thoughts:'So so', rating: '3')
+    click_link 'Sign out'
+    sign_up(email: "amanda@amanda.com", password: "123456")
+    leave_review(thoughts:'Great', rating: '5')
+    expect(page).to have_content('Average rating: 4')
+  end
+
 end

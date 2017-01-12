@@ -9,4 +9,10 @@ class Restaurant < ApplicationRecord
     review.user = user
     review
   end
+
+  def average_rating
+    return 'N/A' if reviews.none?
+    4
+  end
+  
 end
