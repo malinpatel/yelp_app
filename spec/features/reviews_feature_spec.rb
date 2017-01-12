@@ -1,14 +1,10 @@
 require 'rails_helper'
 
 feature 'reviewing' do
-  before do
-    user = User.create(email: "test@test.com", password: "testtest")
-    user.restaurants.create(name: "Subway")
-  end
 
   scenario 'allows users to leave a review using a form' do
     sign_up
-    visit '/restaurants'
+    create_restaurant
     click_link 'Review Subway'
     fill_in "Thoughts", with: "too short"
     select '2', from: 'Rating'
@@ -19,7 +15,7 @@ feature 'reviewing' do
 
   scenario 'allows users to only leave one review' do
     sign_up
-    visit '/restaurants'
+    create_restaurant
     click_link 'Review Subway'
     fill_in "Thoughts", with: "too short"
     select '2', from: 'Rating'
@@ -31,4 +27,11 @@ feature 'reviewing' do
     expect(page).to have_content 'You have already reviewed this restaurant'
   end
 
+  scenario 'allows users to delete their review' do
+    sign_up
+    create_restaurant
+    leave_review
+    click_link 'Delete Subway review'
+    expect(page).to_not have_content('Amazing')
+  end
 end

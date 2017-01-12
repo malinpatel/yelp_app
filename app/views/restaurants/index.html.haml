@@ -6,6 +6,7 @@
       - restaurant.reviews.each do |review|
         %p #{review.thoughts}
         %p #{review.rating}
+        = link_to "Delete #{restaurant.name} review", restaurant_review_path(restaurant, review), method: :delete
     - else
       %h3 No reviews yet
     = link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete

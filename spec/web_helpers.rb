@@ -20,3 +20,10 @@ def create_restaurant
   fill_in 'Name', with: 'Subway'
   click_button 'Create Restaurant'
 end
+
+def leave_review
+  click_link 'Review Subway'
+  fill_in 'Thoughts', with: 'Amazing'
+  select '3', from: 'Rating'
+  click_button 'Leave Review'
+end
