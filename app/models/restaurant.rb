@@ -11,8 +11,11 @@ class Restaurant < ApplicationRecord
   end
 
   def average_rating
-    return 'N/A' if reviews.none?
-    4
+    if reviews.any?
+      reviews.average(:rating)
+    else
+      'N/A'
+    end
   end
-  
+
 end
